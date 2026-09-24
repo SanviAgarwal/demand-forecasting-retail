@@ -1,0 +1,5 @@
+Model,MAPE (%),RMSE,RMSPE (%),n_points,MAPE improvement vs SARIMA (%),RMSE improvement vs SARIMA (%)
+Seasonal naive,24.01,2112.15,35.15,2166,-139.59,-113.5
+SARIMA,10.02,989.28,13.15,2166,0.0,0.0
+XGBoost,9.04,859.38,11.85,2166,9.75,13.13
+LSTM,8.68,872.51,11.47,2166,13.4,11.8
