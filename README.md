@@ -172,6 +172,6 @@ Benchmarking taught me that "best model" isn't a single number — MAPE and RMSE
 
 ## 👤 Author
 
-**Shanvi Agarwal**
-📎 [LinkedIn](https://www.linkedin.com/in/shanvi-agarwal-93b38928b/)
+**Shanvi Agarwal**  
+📎 [LinkedIn](https://www.linkedin.com/in/shanvi-agarwal-93b38928b/)  
 🐙 [GitHub](https://github.com/SanviAgarwal)
