@@ -1,10 +1,3 @@
-"""Run the full benchmark: seasonal naive, SARIMA, XGBoost, LSTM on a held-out 42-day window.
-
-Usage (from repo root):
-    python -m src.run_benchmark                      # full run
-    python -m src.run_benchmark --skip-lstm          # no PyTorch needed
-    python -m src.run_benchmark --n-stores 10 --lstm-epochs 3   # quick test
-"""
 import argparse
 
 from . import data, features, metrics
