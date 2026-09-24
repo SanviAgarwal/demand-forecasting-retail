@@ -49,6 +49,7 @@ This project asks a more useful question than "can I forecast sales":
 | `torch` | Global 2-layer LSTM with a promo/holiday-aware head |
 | `scikit-learn` | Encoding, train/test utilities |
 | `joblib` | Parallel per-store SARIMA fitting |
+| `matplotlib` | Actual vs. predicted forecast plots |
 | `tabulate` | Markdown benchmark table output |
 
 ---
@@ -60,6 +61,7 @@ demand-forecasting-retail/
 │
 ├── data/raw/                    ← Place train.csv and store.csv here (not pushed to GitHub)
 ├── results/                     ← Auto-generated benchmark.csv / benchmark.md
+├── screenshots/                 ← Forecast-vs-actual plots (from plot_results.py)
 │
 ├── src/
 │   ├── config.py                 ← Horizon, eval-store count, seed
@@ -67,6 +69,7 @@ demand-forecasting-retail/
 │   ├── features.py                ← Leak-free lag / rolling / calendar features
 │   ├── metrics.py                 ← MAPE, RMSE, RMSPE, benchmark table with % improvement
 │   ├── run_benchmark.py           ← End-to-end CLI runner
+│   ├── plot_results.py            ← Saves actual-vs-predicted charts per store
 │   └── models/
 │       ├── baseline.py            ← Seasonal-naive sanity floor
 │       ├── sarima.py              ← Per-store SARIMAX baseline
@@ -104,6 +107,14 @@ python -m src.run_benchmark --n-stores 10 --lstm-epochs 3     # quick test
 
 Results are written to `results/benchmark.csv` and `results/benchmark.md`.
 
+**4. (Optional) Generate forecast plots**
+
+```bash
+python -m src.plot_results --stores 1 20 55
+```
+
+Saves one PNG per store to `screenshots/`, plotting actual sales against every model's prediction over the holdout window.
+
 ---
 
 ## ⚖️ The Evaluation Protocol
@@ -139,9 +150,22 @@ This is the part most demand-forecasting projects skip, and it's the part that m
 **The headline takeaway:** both global models beat the per-store SARIMA baseline on every metric. Neither global model wins outright over the other — XGBoost is better at avoiding large misses (RMSE), the LSTM is better on average percentage accuracy (MAPE, RMSPE). The real result isn't "model X wins," it's that **a single global model, trained once across 1,115 stores, outperforms a classical model fit separately to each one** — which is exactly the scalability argument that matters at a company with thousands of stores.
 
 **Caveats, in the interest of not overselling this:**
+
 - One run, one seed, one 42-day window, 60 of 1,115 stores evaluated — the ~1.6% RMSE gap between XGBoost and the LSTM is small enough that a different seed could flip it.
 - XGBoost and the LSTM are trained on all 1,115 stores; SARIMA only ever sees the 60 stores it's scored on — the standard way to compare global vs. per-series models, but worth stating plainly.
 - This is not the official Kaggle test set (those labels aren't public), so these RMSPE numbers aren't directly comparable to the public leaderboard.
+
+---
+
+## 📉 Sample Forecasts
+
+Actual vs. predicted sales for three stores over the 42-day holdout window:
+
+![Store 1 forecast](screenshots/forecast_store_1.png)
+![Store 20 forecast](screenshots/forecast_store_20.png)
+![Store 55 forecast](screenshots/forecast_store_55.png)
+
+The gap between the black actual line and each model's line is the same error the benchmark table above summarizes as MAPE/RMSE — this is what that error looks like day by day, not just as a single averaged number.
 
 ---
 
